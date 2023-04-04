@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100;200;300;400;500;600;700;800&display=swap');
+
+:root {
+  --header-color: #213f7d;
+  --theme-blue: #39cdcc;
+  --background-color: #ffffff;
+  --theme-red: #e4033b;
+  --theme-yellow: #efc848;
+  --theme-purple: #7d4cff;
+  --theme-peach: #f7836e;
+  --theme-pink: #ed80ff;
+  --grey: #545f7d26;
+  --theme-green: #39CD62;
+  --light-green: #F3FCF6;
+  --text-color: #545f7d;
+  --dashboard-background: #E5E5E5;
+  --black: #000000;
+  
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: Work Sans ;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--header-color);
+}
+p, span {
+  color: var(--text-color);
+}
+
+a {
+  text-decoration: none;
+}
+button {
+  cursor: pointer;
+}
+ul {
+  list-style: none;
+}
+input{
+  outline: none;
+}
+
+.active{
+  background-color: var(--theme-blue);
+  opacity: 0.3;
+}
