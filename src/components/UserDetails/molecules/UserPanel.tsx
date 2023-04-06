@@ -1,29 +1,34 @@
 import "../styles/details.scss";
 import { ReactComponent as EmptyStar } from "../../../assets/VectorEmptyStar.svg";
 import { ReactComponent as FilledStar } from "../../../assets/VectorFilledStar.svg";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { DetailsContext } from "../../../context/globalContext";
 import axios from "axios";
 import { Loading } from "../atoms/Loading";
-
+import { AppContext } from "../../../context/globalContext";
+import Error404 from "../../../pages/error404/Error404";
+type prr={
+  id: string | number
+}
 const UserPanel = () => {
-  const [details, setDetails] = useState<any>({});
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { isLoading, details, setSelectedUser, selectedUser, errors , setErrors} =
+    useContext(AppContext);
+  const { id } = useParams();
+  setSelectedUser(id);
+  console.log(id,"selected", selectedUser);
 
-  useEffect(() => {
-    const getUserDetailsFromApi = async () => {
-      setIsLoading(true);
-      const result = await axios.get(
-        "https://6270020422c706a0ae70b72c.mockapi.io/lendsqr/api/v1/users/7"
-      );
-      setDetails(result.data);
-      setIsLoading(false);
-      console.log(details);
-    };
-    getUserDetailsFromApi();
-  }, []);
+  if (errors) {
+  
+    return (
+      <div style={{textAlign:"center"}}>
+        <h1>Error 500 </h1><h3>Server Error</h3>
+   
+      </div>
+    );
+    
+  }
   if (isLoading) {
+    
     return (
       <div className="user_panel">
         <div className="user_panel_container">

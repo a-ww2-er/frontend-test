@@ -2,9 +2,10 @@ import "../styles/details.scss";
 import React, { useEffect, useState } from "react";
 import Table from "./Table";
 import { useContext } from "react";
-import { DetailsContext } from "../../../context/globalContext";
+
 import axios from "axios";
 import { Loading } from "../atoms/Loading";
+import { AppContext } from "../../../context/globalContext";
 type myRow = {
   row: {
     original: { profile: { firstName: String; lastName: String } };
@@ -13,19 +14,8 @@ type myRow = {
 };
 
 const UserDetails = () => {
-  const [details, setDetails] = useState<any>({});
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const getUserDetailsFromApi = async () => {
-      setIsLoading(true);
-      const result = await axios.get(
-        "https://6270020422c706a0ae70b72c.mockapi.io/lendsqr/api/v1/users/7"
-      );
-      setDetails(result.data), setIsLoading(false), console.log(details);
-    };
-    getUserDetailsFromApi();
-  }, []);
+  const {isLoading, details} = useContext(AppContext);
+  
 
   const column1 = React.useMemo(
     () => [

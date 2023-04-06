@@ -19,33 +19,64 @@ const TableElement = () => {
     getUserDetailsFromApi();
   }, []);
 
+  //filter function
+  function SelectColumnFilter( {
+    column: { filterValue, setFilter, preFilteredRows, id },
+  }) {
+    const options = React.useMemo(() => {
+      const options = new Set()
+      preFilteredRows.forEach(row => {
+        options.add(row.values[id])
+      })
+      return [...options.values()]
+    }, [id, preFilteredRows])
+    return (
+      <select
+        value={filterValue}
+        onChange={e => {
+          setFilter(e.target.value || undefined)
+        }}
+      >
+       <option value="">Select</option>
+        {options.map((option, i) => (
+          <option key={i} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    )
+  }
   const column1 = React.useMemo(
     () => [
       {
-        Header: "Full name",
-        accessor: "profile.firstName",
+        Header: "ORGANIZATION",
+        accessor: "orgName",
+        Filter: SelectColumnFilter,
+        filter: 'includes',
       },
       {
-        Header: "Phone number",
-        accessor: "profile.phoneNumber",
+        Header: "USERNAME",
+        accessor: "userName",
       },
       {
-        Header: "Email Address",
+        Header: "EMAIL",
         accessor: "email",
       },
 
-      {
-        Header: "BVN",
-        accessor: "profile.bvn",
-      },
+      
 
       {
-        Header: "Gender",
-        accessor: "profile.gender",
+        Header: "DATE",
+        accessor: "createdAt",
+        Filter: SelectColumnFilter,
+        filter: 'includes',
       },
-
+{
+        Header: "PHONE NUMBER",
+        accessor: "phoneNumber",
+      },
       {
-        Header: "Address",
+        Header: "STATUS",
         accessor: "profile.address",
       },
     ],

@@ -1,12 +1,79 @@
 import { ReactComponent as Filter } from "../../../assets/VectorFilter.svg";
-import { usePagination, useRowSelect, useTable } from "react-table";
+import React, { useState } from "react";
+import {
+  usePagination,
+  useRowSelect,
+  useTable,
+  useFilters,
+  useGlobalFilter,
+  useAsyncDebounce,
+} from "react-table";
 import { Loading } from "../../UserDetails/atoms/Loading";
+import { useNavigate } from "react-router-dom";
 
 type TableProps = {
   children: any;
 };
+function GlobalFilter({
+  preGlobalFilteredRows,
+  globalFilter,
+  setGlobalFilter,
+}) {
+  const count = preGlobalFilteredRows.length;
+  const [value, setValue] = React.useState(globalFilter);
+  const onChange = useAsyncDebounce((value) => {
+    setGlobalFilter(value || undefined);
+  }, 200);
+
+  return (
+    <span>
+      Search:{" "}
+      <input
+        value={value || ""}
+        onChange={(e) => {
+          setValue(e.target.value);
+          onChange(e.target.value);
+        }}
+        placeholder={`${count} records...`}
+        style={{
+          fontSize: "1.1rem",
+          border: "0",
+        }}
+      />
+    </span>
+  );
+}
+
+// Define a default UI for filtering
+function DefaultColumnFilter({
+  column: { filterValue, preFilteredRows, setFilter },
+}) {
+  const count = preFilteredRows.length;
+
+  return (
+    <input
+      value={filterValue || ""}
+      onChange={(e) => {
+        setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
+      }}
+      placeholder="Search"
+    />
+  );
+}
+
 const UserTable = ({ columns, data, isLoading }: any) => {
   // const details: any = useContext(UserContext);
+  const navigate = useNavigate();
+  const [showBox, setShowBox] = useState(true);
+
+  const defaultColumn = React.useMemo(
+    () => ({
+      // Let's set up our default Filter UI
+      Filter: DefaultColumnFilter,
+    }),
+    []
+  );
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -28,13 +95,21 @@ const UserTable = ({ columns, data, isLoading }: any) => {
     toggleRowSelected,
     isSelected,
     setState,
-    state: { selectedRowIds , setSelectedRowIds},
+    visibleColumns,
+    preGlobalFilteredRows,
+    setGlobalFilter,
+    state,
+    state: { selectedRowIds, setSelectedRowIds },
     state: { pageIndex, pageSize },
   }: any = useTable(
     {
       columns,
       data,
+      defaultColumn,
+      // filterTypes,
     },
+    useFilters,
+    useGlobalFilter,
     usePagination,
     useRowSelect
   );
@@ -48,25 +123,74 @@ const UserTable = ({ columns, data, isLoading }: any) => {
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
+              <tr {...headerGroup.getHeaderGroupProps({})}>
                 {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
+                  <th
+                    {...column.getHeaderProps({
+                      onClick: () => setShowBox(!showBox),
+                    })}
+                  >
                     {column.render("Header")}
                   </th>
                 ))}
               </tr>
             ))}
+            {showBox ? (
+              <div className="filter_box">
+                {headerGroups.map((headerGroup) => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th {...column.getHeaderProps()}>
+                        {column.render("Header")}
+                        <div>
+                          {column.canFilter ? column.render("Filter") : null}
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+                <tr>
+                  {" "}
+                  <th
+                    colSpan={visibleColumns.length}
+                    style={{
+                      textAlign: "left",
+                    }}
+                  >
+                    <GlobalFilter
+                      preGlobalFilteredRows={preGlobalFilteredRows}
+                      globalFilter={state.globalFilter}
+                      setGlobalFilter={setGlobalFilter}
+                    />
+                  </th>
+                </tr>
+                <tr>
+                  {" "}
+                  <th  className="buttons">
+                    {" "}
+                    <span>Reset</span>
+                    <span  onClick={() => setShowBox(!showBox)}>Filter</span>
+                  </th>
+                </tr>
+              </div>
+            ) : (
+              ""
+            )}
+            {/* */}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row, i) => {
               prepareRow(row);
               return (
-                <tr {...row.getRowProps({
-                  onClick: () =>{ toggleRowSelected(row.id);
-                    // setState(row.id);
-           console.log(isSelected, selectedRowIds,row.id,rowState) }
-  
-                 } )}>
+                <tr
+                  {...row.getRowProps({
+                    onClick: () => {
+                      // toggleRowSelected(row.id)
+                      navigate(`/dashboard/details/${Number(row.id) + 1}`);
+                      // console.log(isSelected, selectedRowIds, row.id, rowState);
+                    },
+                  })}
+                >
                   {row.cells.map((cell) => {
                     return (
                       <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
@@ -97,9 +221,6 @@ const UserTable = ({ columns, data, isLoading }: any) => {
             Out of <strong> {rows.length}</strong>
           </span>
           <section>
-            {/* <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-            {"<<"}
-          </button>{" "} */}
             <button onClick={() => previousPage()} disabled={!canPreviousPage}>
               {"<"}
             </button>
@@ -113,39 +234,34 @@ const UserTable = ({ columns, data, isLoading }: any) => {
               {"3"}
             </button>
             ...
-            <button className="text" onClick={() => gotoPage(14)}>
+            <button className="text" onClick={() => gotoPage(8)}>
               {"15"}
             </button>
-            <button className="text" onClick={() => gotoPage(15)}>
+            <button className="text" onClick={() => gotoPage(9)}>
               {"16"}
             </button>
             <button onClick={() => nextPage()} disabled={!canNextPage}>
               {">"}
             </button>
-            {/* <button
-            onClick={() => gotoPage(pageCount - 1)}
-            disabled={!canNextPage}
-          >
-            {">>"}
-          </button>{" "} */}
           </section>
         </div>
       </div>
-      <p>Selected Rows: {Object.keys(selectedRowIds).length}</p>
+      {/* <p>Selected Rows: {Object.keys(selectedRowIds).length}</p>
       <pre>
         <code>
           {JSON.stringify(
             {
               selectedRowIds: selectedRowIds,
-              'selectedFlatRows[].original': selectedFlatRows.map(
-                d => d.original
+              "selectedFlatRows[].original": selectedFlatRows.map(
+                (d) => d.original
               ),
             },
             null,
             2
           )}
         </code>
-      </pre>
+      </pre> */}
+      {/* this code above was to detect the row im selecting */}
     </>
   );
 };

@@ -16,6 +16,7 @@
     "react-icons": "^4.8.0",
     "react-router-dom": "^6.10.0",
     "react-table": "^7.8.0",
+    "regenerator-runtime": "^0.13.11",
     "sass": "^1.60.0",
     "vite-plugin-svgr": "^2.4.0"
   },

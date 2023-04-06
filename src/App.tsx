@@ -2,7 +2,6 @@ import "./App.scss";
 import { RouterProvider, Outlet, createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/loginPage/LoginPage";
 import DashBoard from "./pages/dashboardPage/DashBoard";
-import { UserContext } from "./context/globalContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Error404 from "./pages/error404/Error404";
@@ -51,7 +50,7 @@ const App = () => {
           element: <DashBoard />,
         },
         {
-          path: "/dashboard/details",
+          path: "/dashboard/details/:id",
           element: <UserDetailsPage />,
         },
       ],
