@@ -12,6 +12,7 @@ import { Loading } from "../../UserDetails/atoms/Loading";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../context/globalContext";
 import {BsFilter } from "react-icons/bs";
+import {} from "../../../../react-table-config.d"
 
 type TableProps = {
   children: any;
@@ -20,7 +21,7 @@ function GlobalFilter({
   preGlobalFilteredRows,
   globalFilter,
   setGlobalFilter,
-}) {
+}:any) {
   const count = preGlobalFilteredRows.length;
   const [value, setValue] = React.useState(globalFilter);
   const onChange = useAsyncDebounce((value) => {
@@ -49,7 +50,7 @@ function GlobalFilter({
 // Define a default UI for filtering
 function DefaultColumnFilter({
   column: { filterValue, preFilteredRows, setFilter },
-}) {
+}:any) {
   const count = preFilteredRows.length;
 
   return (
@@ -63,7 +64,7 @@ function DefaultColumnFilter({
   );
 }
 
-const UserTable = ({ columns, data, isLoading }: any) => {
+const UserTable = ({ columns, data, isLoading }: Partial<object> | undefined| any) => {
   // const details: any = useContext(UserContext);
   const navigate = useNavigate();
   const [showBox, setShowBox] = useState(false);
@@ -125,9 +126,9 @@ const UserTable = ({ columns, data, isLoading }: any) => {
       
         <table {...getTableProps()}>
           <thead>
-            {headerGroups.map((headerGroup) => (
+            {headerGroups.map((headerGroup:any) => (
               <tr {...headerGroup.getHeaderGroupProps({})}>
-                {headerGroup.headers.map((column) => (
+                {headerGroup.headers.map((column:any) => (
                   <th
                     {...column.getHeaderProps({
                       onClick: () => setShowBox(!showBox),
@@ -142,9 +143,9 @@ const UserTable = ({ columns, data, isLoading }: any) => {
             ))}
             {showBox ? (
               <div className="filter_box">
-                {headerGroups.map((headerGroup) => (
+                {headerGroups.map((headerGroup:any) => (
                   <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => (
+                    {headerGroup.headers.map((column:any) => (
                       <th {...column.getHeaderProps()}>
                         {column.render("Header")}
                         <div>
@@ -184,7 +185,7 @@ const UserTable = ({ columns, data, isLoading }: any) => {
             {/* */}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map((row, i) => {
+            {page.map((row:any) => {
               prepareRow(row);
               return (
                 <tr
@@ -197,7 +198,7 @@ const UserTable = ({ columns, data, isLoading }: any) => {
                     },
                   })}
                 >
-                  {row.cells.map((cell) => {
+                  {row.cells.map((cell:any) => {
                     return (
                       <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                     );

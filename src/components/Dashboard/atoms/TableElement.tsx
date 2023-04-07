@@ -12,10 +12,10 @@ const TableElement = () => {
   //filter function
   function SelectColumnFilter({
     column: { filterValue, setFilter, preFilteredRows, id },
-  }) {
+  }:any) {
     const options = React.useMemo(() => {
       const options = new Set();
-      preFilteredRows.forEach((row) => {
+      preFilteredRows.forEach((row:any) => {
         options.add(row.values[id]);
       });
       return [...options.values()];
@@ -28,7 +28,7 @@ const TableElement = () => {
         }}
       >
         <option value="">Select</option>
-        {options.map((option, i) => (
+        {options.map((option:any, i) => (
           <option key={i} value={option}>
             {option}
           </option>
@@ -47,10 +47,10 @@ const TableElement = () => {
     <span className="pending_status">Pending</span>,
     <span className="blacklisted_status">BlackListed</span>,
   ];
-  function showMenu(row) {
-    setRowOpen(row.toString());
-    console.log("rowopen", rowOpen, "id", row);
-  }
+  // function showMenu(row:any) {
+  //   setRowOpen(row.toString());
+  //   console.log("rowopen", rowOpen, "id", row);
+  // }
   const column1 = React.useMemo(
     () => [
       {
