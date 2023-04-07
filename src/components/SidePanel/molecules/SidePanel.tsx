@@ -15,7 +15,7 @@ import {ReactComponent as Services} from "../../../assets/VectorServices.svg"
 import {ReactComponent as Settlements} from "../../../assets/VectorSettlements.svg"
 import {ReactComponent as Pricing} from "../../../assets/VectorPricing.svg"
 import {ReactComponent as AuditLogs} from "../../../assets/VectorAuditLogs.svg"
-import {AiOutlineTransaction, AiOutlineBarChart} from "react-icons/ai"
+import {AiOutlineTransaction, AiOutlineBarChart, AiOutlineMenu} from "react-icons/ai"
 import {HiUserGroup} from "react-icons/hi"
 import {VscSettings} from "react-icons/vsc"
 
@@ -23,12 +23,22 @@ import { IoMdArrowDropdown } from "react-icons/io";
 
 import "../styles/sidepanel.scss";
 import Category from "./Category";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { useContext } from "react";
+import { AppContext } from "../../../context/globalContext";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const SidePanel = () => {
+  const {showNav, setShowNav} = useContext(AppContext)
+ if(showNav){
+  return(
+    <></>
+  )
+ }
   return (
     <nav className="side_panel">
-      <div className="side_panel_main_links">
+       
+      <div className={ showNav ? "side_panel_main_links_active" : "side_panel_main_links"}>
         <Category>
           <NavLink to="">
             <Organizations />
@@ -36,10 +46,10 @@ const SidePanel = () => {
             <IoMdArrowDropdown />
           </NavLink>
 
-          <NavLink to="/dashboard">
+          <Link to="/dashboard">
             <HomeIcon />
             Dashboard
-          </NavLink>
+          </Link>
         </Category>
       </div>
 

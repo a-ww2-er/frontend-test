@@ -15,7 +15,9 @@ type AppStatesTypes ={
     setSelectedUser:  React.Dispatch<React.SetStateAction<string | undefined>>,
     selectedUser: string | undefined,
     errors: boolean,
+    showNav: boolean,
     setErrors:React.Dispatch<React.SetStateAction<boolean>>,
+    setShowNav:React.Dispatch<React.SetStateAction<boolean>>,
     details2:any,
     setDetails2: React.Dispatch<any>
 }
@@ -28,6 +30,7 @@ const AppContext = createContext({} as AppStatesTypes);
  const [details, setDetails] = useState<any>({});
  const [isLoading, setIsLoading] = useState<boolean>(false);
  const [errors, setErrors] = useState<boolean>(false);
+ const [showNav, setShowNav] = useState<boolean>(false);
  const [selectedUser, setSelectedUser] = useState<string | undefined>("0");
  const [details2, setDetails2] = useState<any>([]);
 
@@ -74,7 +77,9 @@ const AppContext = createContext({} as AppStatesTypes);
   errors,
   setErrors,
   details2,
-  setDetails2
+  setDetails2,
+  showNav,
+  setShowNav
   }}>
     {children}
   
