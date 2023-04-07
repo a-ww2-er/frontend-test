@@ -14,8 +14,7 @@ type myRow = {
 };
 
 const UserDetails = () => {
-  const {isLoading, details} = useContext(AppContext);
-  
+  const { isLoading, details } = useContext(AppContext);
 
   const column1 = React.useMemo(
     () => [

@@ -14,6 +14,10 @@ const NavBar = () => {
   const handleSearch = () => {
     console.log(searchValue);
   };
+  if (window.innerWidth < 740) {
+    setShowNav(true)
+  }
+
   return (
     <nav className="navigation">
       <div
