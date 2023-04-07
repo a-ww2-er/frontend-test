@@ -5,47 +5,21 @@ import UserPanel from "../../components/UserDetails/molecules/UserPanel";
 import "../../styles/detailspage.scss";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Loading } from "./../../components/UserDetails/atoms/Loading";
-import { DetailsContext } from "../../context/globalContext";
+import { AppContext } from "../../context/globalContext";
+import Error500 from "../error404/Error500";
 
 export type DetailsProps = {
   data: any;
 };
 
 const UserDetailsPage = () => {
-  const [data, setData] = useState<any>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const { id } = useParams();
+  const {errors, setErrors }=useContext(AppContext)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const result = await axios.get(
-          `https://6270020422c706a0ae70b72c.mockapi.io/lendsqr/api/v1/users/9`
-        );
-        setData(result.data);
-      } catch (error) {
-        console.log(error);
-      }
-
-      setIsLoading(false);
-    };
-  
-    fetchData()
-    console.log(id)
-
-  }, []);
   return (
     <>
-      {/* {isLoading ? (
-        <tr>
-          <td>
-            <Loading />
-          </td>
-        </tr>
-      ) : ( */}
+       { errors ? (<Error500/>): (
         <div className="details_container">
           <BackButton />
           <div className="details_container_title">
@@ -67,7 +41,7 @@ const UserDetailsPage = () => {
             <UserPanel />
             <UserDetails />
           {/* </DetailsContext.Provider> */}
-        </div>
+        </div>)}
   
     </>
   );

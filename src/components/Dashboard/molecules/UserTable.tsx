@@ -1,5 +1,5 @@
 import { ReactComponent as Filter } from "../../../assets/VectorFilter.svg";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   usePagination,
   useRowSelect,
@@ -10,6 +10,8 @@ import {
 } from "react-table";
 import { Loading } from "../../UserDetails/atoms/Loading";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../../context/globalContext";
+import {BsFilter } from "react-icons/bs";
 
 type TableProps = {
   children: any;
@@ -64,7 +66,8 @@ function DefaultColumnFilter({
 const UserTable = ({ columns, data, isLoading }: any) => {
   // const details: any = useContext(UserContext);
   const navigate = useNavigate();
-  const [showBox, setShowBox] = useState(true);
+  const [showBox, setShowBox] = useState(false);
+  const { setErrors} =useContext(AppContext)
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -119,7 +122,7 @@ const UserTable = ({ columns, data, isLoading }: any) => {
 
   return (
     <>
-      <div className="dashboard">
+      
         <table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
@@ -129,8 +132,10 @@ const UserTable = ({ columns, data, isLoading }: any) => {
                     {...column.getHeaderProps({
                       onClick: () => setShowBox(!showBox),
                     })}
-                  >
-                    {column.render("Header")}
+                  > { column.Header !== "" ? <span> {column.render("Header")}
+                    <BsFilter />
+                    </span> : ""
+}
                   </th>
                 ))}
               </tr>
@@ -186,6 +191,7 @@ const UserTable = ({ columns, data, isLoading }: any) => {
                   {...row.getRowProps({
                     onClick: () => {
                       // toggleRowSelected(row.id)
+                      setErrors(false)
                       navigate(`/dashboard/details/${Number(row.id) + 1}`);
                       // console.log(isSelected, selectedRowIds, row.id, rowState);
                     },
@@ -245,7 +251,7 @@ const UserTable = ({ columns, data, isLoading }: any) => {
             </button>
           </section>
         </div>
-      </div>
+   
       {/* <p>Selected Rows: {Object.keys(selectedRowIds).length}</p>
       <pre>
         <code>

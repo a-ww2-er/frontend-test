@@ -85,6 +85,7 @@
 
 //table container
 .user_details {
+  
   background-color: rgb(255, 255, 255);
   box-shadow: 3px 5px 20px rgba(0, 0, 0, 0.04);
   height: 100%;
@@ -97,6 +98,7 @@
 
 //table styles
 table {
+  overflow-x: scroll;
   width: 100%;
   font-weight: 400;
   border-spacing: 0;

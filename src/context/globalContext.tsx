@@ -15,7 +15,9 @@ type AppStatesTypes ={
     setSelectedUser:  React.Dispatch<React.SetStateAction<string | undefined>>,
     selectedUser: string | undefined,
     errors: boolean,
-    setErrors:React.Dispatch<React.SetStateAction<boolean>>
+    setErrors:React.Dispatch<React.SetStateAction<boolean>>,
+    details2:any,
+    setDetails2: React.Dispatch<any>
 }
 //create context
 const AppContext = createContext({} as AppStatesTypes);
@@ -27,8 +29,23 @@ const AppContext = createContext({} as AppStatesTypes);
  const [isLoading, setIsLoading] = useState<boolean>(false);
  const [errors, setErrors] = useState<boolean>(false);
  const [selectedUser, setSelectedUser] = useState<string | undefined>("0");
+ const [details2, setDetails2] = useState<any>([]);
+
 
  useEffect(() => {
+   const getUserDetailsFromApi = async () => {
+     setIsLoading(true);
+     const result = await axios.get(
+       "https://6270020422c706a0ae70b72c.mockapi.io/lendsqr/api/v1/users"
+     );
+     setDetails2(result.data);
+     setIsLoading(false);
+   };
+   getUserDetailsFromApi();
+ }, []);
+
+ useEffect(() => {
+ 
    const getUserDetailsFromApi = async () => {
     try{
      setIsLoading(true);
@@ -55,7 +72,9 @@ const AppContext = createContext({} as AppStatesTypes);
   selectedUser,
   setSelectedUser,
   errors,
-  setErrors
+  setErrors,
+  details2,
+  setDetails2
   }}>
     {children}
   

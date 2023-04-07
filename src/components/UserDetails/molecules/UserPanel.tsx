@@ -17,16 +17,7 @@ const UserPanel = () => {
   setSelectedUser(id);
   console.log(id,"selected", selectedUser);
 
-  if (errors) {
-  
-    return (
-      <div style={{textAlign:"center"}}>
-        <h1>Error 500 </h1><h3>Server Error</h3>
-   
-      </div>
-    );
-    
-  }
+
   if (isLoading) {
     
     return (
